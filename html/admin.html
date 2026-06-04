@@ -1,0 +1,211 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Studiova Dashboard</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
+    
+    <style>
+        body {
+            font-family: 'Plus Jakarta Sans', sans-serif;
+            background-color: #f4f6f9;
+        }
+        .sidebar {
+            min-height: 100vh;
+            background-color: #1a1a1a;
+            color: #fff;
+        }
+        .sidebar .nav-link {
+            color: #b3b3b3;
+            padding: 12px 20px;
+            border-radius: 8px;
+            margin: 4px 0;
+        }
+        .sidebar .nav-link.active, .sidebar .nav-link:hover {
+            background-color: #bfff00;
+            color: #000 !important;
+            font-weight: 600;
+        }
+        .card-custom {
+            border: 1px solid #e5e7eb;
+            border-radius: 12px;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.01);
+            background: #fff;
+        }
+        .table-responsive {
+            background: #fff;
+            border-radius: 12px;
+        }
+        .bg-lime {
+            background-color: #bfff00 !important;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="container-fluid">
+        <div class="row">
+            <div class="col-md-3 col-lg-2 sidebar d-flex flex-column p-3 position-sticky top-0" style="height: 100vh;">
+                <h3 class="fw-bold mb-4 px-2">Studiova<span style="color: #bfff00;">.</span></h3>
+                <ul class="nav nav-pills flex-column mb-auto gap-1" id="adminTabs" role="tablist">
+                    <li class="nav-item">
+                        <button class="nav-link w-100 text-start active" id="orders-tab" data-bs-toggle="tab" data-bs-target="#orders-pane" type="button" role="tab">📦 Orders</button>
+                    </li>
+                    <li class="nav-item">
+                        <button class="nav-link w-100 text-start" id="projects-tab" data-bs-toggle="tab" data-bs-target="#projects-pane" type="button" role="tab">📁 Projects</button>
+                    </li>
+                    <li class="nav-item">
+                        <button class="nav-link w-100 text-start" id="blogs-tab" data-bs-toggle="tab" data-bs-target="#blogs-pane" type="button" role="tab">✍️ Blogs</button>
+                    </li>
+                </ul>
+                <hr>
+                <a href="../index.html" class="btn btn-outline-light btn-sm w-100 rounded-3">View Website</a>
+                <button onclick="localStorage.clear(); sessionStorage.clear(); window.location.href='../index.html';" class="btn btn-sm btn-outline-danger w-100 rounded-3 mt-2">
+                    🚪 Log Out Admin
+                </button>
+            </div>
+
+            <main class="col-md-9 ms-sm-auto col-lg-10 px-md-4 py-4">
+                <div class="tab-content" id="adminTabsContent">
+                    
+                    <div class="tab-pane fade show active" id="orders-pane" role="tabpanel">
+                        <div class="d-flex justify-content-between align-items-center mb-4">
+                            <h2 class="fw-bold m-0">Service Orders</h2>
+                        </div>
+                        <div class="table-responsive card-custom p-3">
+                            <table class="table table-hover align-middle mb-0">
+                                <thead class="table-light">
+                                    <tr>
+                                        <th>ID</th>
+                                        <th>Customer</th>
+                                        <th>Contact</th>
+                                        <th>Plan Selected</th>
+                                        <th>Amount</th>
+                                        <th>Status</th>
+                                        <th>Date</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="ordersTableBody">
+                                    </tbody>
+                            </table>
+                        </div>
+                    </div>
+
+                    <div class="tab-pane fade" id="projects-pane" role="tabpanel">
+                        <div class="d-flex justify-content-between align-items-center mb-4">
+                            <h2 class="fw-bold m-0">Projects Portfolio</h2>
+                            <button class="btn btn-dark rounded-pill px-4" data-bs-toggle="modal" data-bs-target="#addProjectModal">+ Add Project</button>
+                        </div>
+                        <div class="table-responsive card-custom p-3">
+                            <table class="table table-hover align-middle mb-0">
+                                <thead class="table-light">
+                                    <tr>
+                                        <th>Image</th>
+                                        <th>Project Name</th>
+                                        <th>Tags</th>
+                                        <th class="text-end">Actions</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="projectsTableBody">
+                                    </tbody>
+                            </table>
+                        </div>
+                    </div>
+
+                    <div class="tab-pane fade" id="blogs-pane" role="tabpanel">
+                        <div class="d-flex justify-content-between align-items-center mb-4">
+                            <h2 class="fw-bold m-0">Blog Posts</h2>
+                            <button class="btn btn-dark rounded-pill px-4" data-bs-toggle="modal" data-bs-target="#addBlogModal">+ Create Post</button>
+                        </div>
+                        <div class="table-responsive card-custom p-3">
+                            <table class="table table-hover align-middle mb-0">
+                                <thead>
+                                    <tr>
+                                        <th>Cover</th>
+                                        <th>Description</th> <th>Author</th>
+                                        <th>Date</th>        <th class="text-end">Actions</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="blogsTableBody">
+                                    </tbody>
+                            </table>
+                        </div>
+                    </div>
+
+                </div>
+            </main>
+        </div>
+    </div>
+
+    <div class="modal fade" id="addProjectModal" tabindex="-1">
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content rounded-4 border-0 shadow">
+                <div class="modal-header">
+                    <h5 class="modal-title fw-bold">Add New Project</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                </div>
+                <form id="projectForm" onsubmit="submitProjectForm(event)">
+                    <div class="modal-body">
+                        <div class="mb-3">
+                            <label class="form-label fw-medium">Project Name</label>
+                            <input type="text" id="p_name" class="form-control" required placeholder="e.g. Digital Magazine">
+                        </div>
+                        <div class="mb-3">
+                            <label class="form-label fw-medium">Image URL</label>
+                            <input type="url" id="p_img" class="form-control" placeholder="../assets/images/...">
+                        </div>
+                        <div class="mb-3">
+                            <label class="form-label fw-medium">Tags (Comma separated)</label>
+                            <input type="text" id="p_tags" class="form-control" placeholder="e.g. Digital design, Web development">
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-light" data-bs-dismiss="modal">Cancel</button>
+                        <button type="submit" class="btn bg-lime text-dark fw-bold px-4">Save Project</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <div class="modal fade" id="addBlogModal" tabindex="-1">
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content rounded-4 border-0 shadow">
+                <div class="modal-header">
+                    <h5 class="modal-title fw-bold">Create New Blog Post</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                </div>
+                <form id="blogForm" onsubmit="submitBlogForm(event)">
+                    <div class="modal-body d-flex flex-column gap-3">
+                        <div>
+                            <label class="form-label fw-medium">Blog Description</label>
+                            <textarea id="b_des" class="form-control" rows="3" placeholder="Nhập mô tả tóm tắt bài viết..." required></textarea>
+                        </div>
+                        <div>
+                            <label class="form-label fw-medium">Publish Date</label>
+                            <input type="date" id="b_date" class="form-control" required>
+                        </div>
+                        <div>
+                            <label class="form-label fw-medium">Author</label>
+                            <input type="text" id="b_author" class="form-control" placeholder="Tên tác giả (Mặc định: Admin)">
+                        </div>
+                        <div>
+                            <label class="form-label fw-medium">Cover Image URL</label>
+                            <input type="url" id="b_img" class="form-control" placeholder="https://example.com/banner.jpg">
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-outline-secondary btn-sm px-3" data-bs-dismiss="modal">Cancel</button>
+                        <button type="submit" class="btn btn-dark btn-sm px-4">Publish Post</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="../assets/js/admin.js" type="module"></script>
+</body>
+</html>
