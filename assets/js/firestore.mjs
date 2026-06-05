@@ -75,17 +75,26 @@ async function addToLocalStoreRender(collectionName) {
     const cachedCollection = localStorage.getItem(collectionName);
     const cachedCollection_2 = localStorage.getItem(`cached_${collectionName}`);
     let collection = null;
-    if (cachedCollection && cachedCollection.length == cachedCollection_2.length) {
-        collection = JSON.parse(cachedCollection);
-        return collection
-    } else {
-        const firestoreModule = await import('./firestore.mjs');
-        const { fetchDocuments } = firestoreModule;
-        collection = await fetchDocuments(collectionName);
-        if (collection && collection.length > 0) {
-            localStorage.setItem(collectionName, JSON.stringify(collection));
+    if (cachedCollection_2){
+        if (cachedCollection && cachedCollection.length == cachedCollection_2.length) {
+            collection = JSON.parse(cachedCollection);
             return collection
         }
+    }
+    else {
+        if (cachedCollection) {
+            collection = JSON.parse(cachedCollection);
+            return collection
+        }
+        else {
+            const firestoreModule = await import('./firestore.mjs');
+            const { fetchDocuments } = firestoreModule;
+            collection = await fetchDocuments(collectionName);
+            if (collection && collection.length > 0) {
+                localStorage.setItem(collectionName, JSON.stringify(collection));
+                return collection
+            }
+        }   
     }
 }
 
