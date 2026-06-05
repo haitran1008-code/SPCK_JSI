@@ -80,6 +80,15 @@ async function addToLocalStoreRender(collectionName) {
             collection = JSON.parse(cachedCollection);
             return collection
         }
+        else {
+            const firestoreModule = await import('./firestore.mjs');
+            const { fetchDocuments } = firestoreModule;
+            collection = await fetchDocuments(collectionName);
+            if (collection && collection.length > 0) {
+                localStorage.setItem(collectionName, JSON.stringify(collection));
+                return collection
+            }
+        }   
     }
     else {
         if (cachedCollection) {
